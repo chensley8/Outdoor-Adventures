@@ -1,0 +1,11 @@
+{
+  "name": "outdoor-adventures",
+  "version": "1.0.0",
+  "description": "![Outdoor_Adventurers](https://github.com/EvanRC/Outdoor-Adventures/assets/124648885/c083f247-e1fc-4df1-9fbb-c8785d8a01f7)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
