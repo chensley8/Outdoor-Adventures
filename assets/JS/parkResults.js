@@ -1,6 +1,6 @@
 // open weather and NPS API keys
-const opWeatherKey = 'ef52a053126f1ffad0042182f7e8f385'
-const npsKey = '9fi4OHLPohhQm2w4RcbNkl8tPu6xMiqljmISBjp6'
+const opWeatherKey = process.env.OPEN_WEATHER_KEY;
+const npsKey = process.env.NPS_KEY;
 // NPS API endpoints
 const parkUrl = 'https://developer.nps.gov/api/v1/parks?stateCode=CA'
 const passUrl = 'https://developer.nps.gov/api/v1/feespasses?statecode=CA'
@@ -285,7 +285,7 @@ backToTopBtn.addEventListener('click', () => {
 // Function to geocode a location using Google Maps API
 function geocodeLocation(location) {
   // Construct the URL for the geocoding API with the location query and API key
-  var geocodeApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBOP3dL1H72x3jttlJeSVdGa0jvE5QpIyU`
+  var geocodeApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_MAPS_KEY}`;
   // Make a request to the geocode API URL.
   return fetch(geocodeApiUrl)
     .then(function (response) {
