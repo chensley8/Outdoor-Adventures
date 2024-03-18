@@ -1,27 +1,28 @@
 const express = require('express');
-const app = express();
+const fetch = require('node-fetch');
 const path = require('path');
-const fetch = require('node-fetch'); // Make sure you have node-fetch installed
 require('dotenv').config();
+const cors = require('cors');
 
-// Serve static files from the 'public' directory
-app.use(express.static('public')); // I suggest placing your static files in a 'public' folder
+const app = express();
+app.use(cors());
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.use(express.static(path.join(__dirname, 'assets')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/geocode', async (req, res) => {
   const location = req.query.location;
   const geocodeApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.GOOGLE_MAPS_KEY}`;
-  
+
   try {
     const response = await fetch(geocodeApiUrl);
     const data = await response.json();
     res.json(data);
   } catch (error) {
-    console.error('Error geocoding location:', error);
-    res.status(500).json({ error: 'Error geocoding location' });
+    res.status(500).send('Error with geocoding request.');
   }
 });
 
@@ -34,8 +35,7 @@ app.get('/weather', async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (error) {
-    console.error('Error fetching weather:', error);
-    res.status(500).json({ error: 'Error fetching weather' });
+    res.status(500).send('Error with weather request.');
   }
 });
 
@@ -48,12 +48,35 @@ app.get('/forecast', async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (error) {
-    console.error('Error fetching forecast:', error);
-    res.status(500).json({ error: 'Error fetching forecast' });
+    res.status(500).send('Error with forecast request.');
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, function() {
-  console.log(`Server is running on port ${PORT}.`);
+app.get('/parks', async (req, res) => {
+  const parkUrl = `https://developer.nps.gov/api/v1/parks?stateCode=CA&api_key=${process.env.NPS_KEY}`;
+
+  try {
+    const response = await fetch(parkUrl);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).send('Error with parks request.');
+  }
+});
+
+app.get('/feespasses', async (req, res) => {
+  const passUrl = `https://developer.nps.gov/api/v1/feespasses?statecode=CA&api_key=${process.env.NPS_KEY}`;
+
+  try {
+    const response = await fetch(passUrl);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).send('Error with feespasses request.');
+  }
+});
+
+const PORT = process.env.PORT || 3011;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
